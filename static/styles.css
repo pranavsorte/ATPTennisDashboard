@@ -1,0 +1,19 @@
+#resultrank {
+    padding: 2px;
+    border: 1px solid;
+    width:300px;
+    height:200px
+    }
+
+body {
+    background-color: beige;
+}
+
+.row-full{
+    width: 100vw;
+    position: relative;
+    margin-left: -50vw;
+    height: 100px;
+    margin-top: 100px;
+    left: 50%;
+   }
