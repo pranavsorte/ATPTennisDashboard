@@ -247,7 +247,36 @@ def insertmatch():
  
 @app.route('/updatematches', methods=["POST","GET"])
 def updatematches():
-    
+    if request.method == 'POST':
+        conn = get_db_connection()
+        cur = conn.cursor()
+        
+        season = request.form['seasonselect']
+        print(season)
+        if season == "2019":
+            query = "select * from atp_matches_2019"
+            cur.execute(query)
+            players = cur.fetchall()
+            cur.close()
+            conn.close()
+            return render_template('/updatematches.html',players=players)
+        
+        elif season == "2020":
+            query = "select * from atp_matches_2020"
+            cur.execute(query)
+            players = cur.fetchall()
+            cur.close()
+            conn.close()
+            return render_template('/updatematches.html',players=players)
+        
+        else :
+            query = "select * from atp_matches_2021"
+            cur.execute(query)
+            players = cur.fetchall()
+            cur.close()
+            conn.close()
+            return render_template('/updatematches.html',players=players)
+            
     return render_template('/updatematches.html')
 
 if __name__ == "__main__":
