@@ -196,7 +196,59 @@ def delete_student(id):
     conn.commit()
     # flash('Student Removed Successfully')
     return render_template('/success.html')
+
+@app.route('/insertmatch', methods = ["POST", "GET"])
+def insertmatch():
+    if request.method == 'POST':
+        match_id = request.form['matchid']
+        tname = request.form['tname']
+        surface = request.form['surface']
+        winner_id = request.form['winner_id']
+        wname = request.form['wname']
+        loserid = request.form['loserid']
+        losername = request.form['losername']
+        round = request.form['round']
+        score = request.form['score']
+        waces = request.form['waces']
+        wdfs = request.form['wdfs']
+        laces = request.form['laces']
+        ldfs = request.form['ldfs']
+        wrank = request.form['wrank']
+        lrank = request.form['lrank']
+        season = request.form['gridRadios']
+        
+        
+        print(match_id,tname,surface,winner_id,wname,loserid,losername,round,score,waces,wdfs,laces,ldfs,wrank,lrank,season)
+        conn = get_db_connection()
+        cur = conn.cursor()
+
+        if season == '2019':
+            query = "INSERT INTO atp_matches_2019 VALUES (" +match_id+ ",'" +tname+ "','" +surface+ "'," +winner_id+ ",'" +wname+ "'," +loserid+ ",'" +losername+ "','" +round+ "','" +score+ "'," +waces+ "," +wdfs+ "," +laces+ "," +ldfs+ "," +wrank+ "," +lrank+ ");" 
+            print(query)
+            cur.execute(query)
+            conn.commit()
+            return render_template('/success.html')
+        elif season == '2020':
+            query = "INSERT INTO atp_matches_2020 VALUES (" +match_id+ ",'" +tname+ "','" +surface+ "'," +winner_id+ ",'" +wname+ "'," +loserid+ ",'" +losername+ "','" +round+ "','" +score+ "'," +waces+ "," +wdfs+ "," +laces+ "," +ldfs+ "," +wrank+ "," +lrank+ ");" 
+            print(query)
+            cur.execute(query)
+            conn.commit()
+            return render_template('/success.html')
+        else :
+            query = "INSERT INTO atp_matches_2021 VALUES (" +match_id+ ",'" +tname+ "','" +surface+ "'," +winner_id+ ",'" +wname+ "'," +loserid+ ",'" +losername+ "','" +round+ "','" +score+ "'," +waces+ "," +wdfs+ "," +laces+ "," +ldfs+ "," +wrank+ "," +lrank+ ");" 
+            print(query)
+            cur.execute(query)
+            conn.commit()
+            return render_template('/success.html')
+        
+        
+        # return render_template('/success.html')
+    return render_template('/insertmatch.html')
  
+@app.route('/updatematches', methods=["POST","GET"])
+def updatematches():
+    
+    return render_template('/updatematches.html')
 
 if __name__ == "__main__":
     app.run(debug=True)
