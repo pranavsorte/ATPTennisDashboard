@@ -49,13 +49,38 @@ def rankings():
 @app.route('/atp2019', methods=['GET','POST'])
 def atp2019():
     if request.method == 'POST':
-        player_name = request.form['playername']
-        # surface = request.form['surface']
+        winner = request.form['winner']
+        loser = request.form['loser']
+        surface = request.form['surface']
+        tournament = request.form['tourneyname']
+        waces = request.form['waces']
+        laces = request.form['laces']
+        wdfs = request.form['wdfs']
+        ldfs = request.form['ldfs']
+        
         # print(player_name,surface)
         
         conn = get_db_connection()
         cur = conn.cursor()
-        query = "select winner_name, loser_name, surface, tourney_name, round, score, w_ace, w_df, l_ace, l_df from atp_matches_2019 where winner_name = '" + player_name + "' OR loser_name = '" + player_name + "';"
+        
+        query = "select winner_name, loser_name, surface, tourney_name, round, score, w_ace, w_df, l_ace, l_df from atp_matches_2019 where winner_name = '" + winner + "'"
+        if loser != "":
+            query = query + " AND loser_name = '" +loser+ "'"
+        if surface != "":
+            query = query + " AND surface = '" +surface+ "' "
+        if tournament != "":
+            query = query + " AND tourney_name = '" +tournament+ "' "
+        if waces != "":
+            query = query + " AND w_ace >= '" +waces+ "' "
+        if laces != "":
+            query = query + " AND l_aces >= '" +laces+ "' "
+        if wdfs != "":
+            query = query + " AND wdfs >= '" +wdfs+ "' "
+        if ldfs != "":
+            query = query + " AND ldfs >= '" +ldfs+ "' "
+        
+        print(query)
+        
         cur.execute(query)
         results = cur.fetchall()
         cur.close()
@@ -67,36 +92,88 @@ def atp2019():
 @app.route('/atp2020', methods=['GET','POST'])
 def atp2020():
     if request.method == 'POST':
-        player_name = request.form['playername']
-        # surface = request.form['surface']
+        winner = request.form['winner']
+        loser = request.form['loser']
+        surface = request.form['surface']
+        tournament = request.form['tourneyname']
+        waces = request.form['waces']
+        laces = request.form['laces']
+        wdfs = request.form['wdfs']
+        ldfs = request.form['ldfs']
         
+        # print(player_name,surface)
         
         conn = get_db_connection()
         cur = conn.cursor()
-        query = "select winner_name, loser_name, surface, tourney_name, round, score, w_ace, w_df, l_ace, l_df from atp_matches_2020 where winner_name = '" + player_name + "' OR loser_name = '" + player_name + "';"
+        
+        query = "select winner_name, loser_name, surface, tourney_name, round, score, w_ace, w_df, l_ace, l_df from atp_matches_2020 where winner_name = '" + winner + "'"
+        if loser != "":
+            query = query + " AND loser_name = '" +loser+ "'"
+        if surface != "":
+            query = query + " AND surface = '" +surface+ "' "
+        if tournament != "":
+            query = query + " AND tourney_name = '" +tournament+ "' "
+        if waces != "":
+            query = query + " AND w_ace >= '" +waces+ "' "
+        if laces != "":
+            query = query + " AND l_aces >= '" +laces+ "' "
+        if wdfs != "":
+            query = query + " AND wdfs >= '" +wdfs+ "' "
+        if ldfs != "":
+            query = query + " AND ldfs >= '" +ldfs+ "' "
+        
+        print(query)
+        
         cur.execute(query)
         results = cur.fetchall()
         cur.close()
         conn.close()
         print(results)
+        
         return render_template('/atp2020.html', results = results)
     return render_template('/atp2020.html')
 
 @app.route('/atp2021', methods=['GET','POST'])
 def atp2021():
     if request.method == 'POST':
-        player_name = request.form['playername']
-        # surface = request.form['surface']
+        winner = request.form['winner']
+        loser = request.form['loser']
+        surface = request.form['surface']
+        tournament = request.form['tourneyname']
+        waces = request.form['waces']
+        laces = request.form['laces']
+        wdfs = request.form['wdfs']
+        ldfs = request.form['ldfs']
         
+        # print(player_name,surface)
         
         conn = get_db_connection()
         cur = conn.cursor()
-        query = "select winner_name, loser_name, surface, tourney_name, round, score, w_ace, w_df, l_ace, l_df from atp_matches_2021 where winner_name = '" + player_name + "' OR loser_name = '" + player_name + "';"
+        
+        query = "select winner_name, loser_name, surface, tourney_name, round, score, w_ace, w_df, l_ace, l_df from atp_matches_2021 where winner_name = '" + winner + "'"
+        if loser != "":
+            query = query + " AND loser_name = '" +loser+ "'"
+        if surface != "":
+            query = query + " AND surface = '" +surface+ "' "
+        if tournament != "":
+            query = query + " AND tourney_name = '" +tournament+ "' "
+        if waces != "":
+            query = query + " AND w_ace >= '" +waces+ "' "
+        if laces != "":
+            query = query + " AND l_aces >= '" +laces+ "' "
+        if wdfs != "":
+            query = query + " AND wdfs >= '" +wdfs+ "' "
+        if ldfs != "":
+            query = query + " AND ldfs >= '" +ldfs+ "' "
+        
+        print(query)
+        
         cur.execute(query)
         results = cur.fetchall()
         cur.close()
         conn.close()
         print(results)
+        
         return render_template('/atp2021.html', results = results)
     return render_template('/atp2021.html')
 
@@ -244,6 +321,47 @@ def insertmatch():
         
         # return render_template('/success.html')
     return render_template('/insertmatch.html')
+
+@app.route('/edit_matches/<id>/<season>', methods=["POST","GET"])
+def get_match_id(id,season):
+    # if request.method == 'POST':
+    # print(season)
+    # print(id)
+    # season = request.form['gridRadios']
+    # print(season)
+    conn = get_db_connection()
+    cur = conn.cursor()
+    if season == '2019':
+        query = "SELECT * FROM atp_matches_2019 where match_id = " +id+ ";"
+        cur.execute(query)
+        data = cur.fetchall()
+        cur.close()
+        print(data[0])
+        return render_template('edit_match.html', player = data[0], season=season)
+    elif season == '2020':
+        query = "SELECT * FROM atp_matches_2020 where match_id = " +id+ ";"
+        cur.execute(query)
+        data = cur.fetchall()
+        cur.close()
+        print(data[0])
+        return render_template('edit_match.html', player = data[0], season=season)
+    else :
+        query = "SELECT * FROM atp_matches_2021 where match_id = " +id+ ";"
+        cur.execute(query)
+        data = cur.fetchall()
+        cur.close()
+        print(data[0])
+        return render_template('edit_match.html', player = data[0], season=season)
+
+    print("")
+        
+        
+        
+    
+    
+    # return render_template('/edit_match.html')
+    
+    
  
 @app.route('/updatematches', methods=["POST","GET"])
 def updatematches():
@@ -259,7 +377,7 @@ def updatematches():
             players = cur.fetchall()
             cur.close()
             conn.close()
-            return render_template('/updatematches.html',players=players)
+            return render_template('/updatematches.html',players=players, season = '2019')
         
         elif season == "2020":
             query = "select * from atp_matches_2020"
@@ -267,7 +385,7 @@ def updatematches():
             players = cur.fetchall()
             cur.close()
             conn.close()
-            return render_template('/updatematches.html',players=players)
+            return render_template('/updatematches.html',players=players, season='2020')
         
         else :
             query = "select * from atp_matches_2021"
@@ -275,9 +393,65 @@ def updatematches():
             players = cur.fetchall()
             cur.close()
             conn.close()
-            return render_template('/updatematches.html',players=players)
+            return render_template('/updatematches.html',players=players, season='2021')
             
     return render_template('/updatematches.html')
+
+
+@app.route('/update_match/<id>/<season>', methods=['POST'])
+def update_match(id,season):
+    if request.method == 'POST':
+        score = request.form['score']
+        waces = request.form['waces']
+        wdfs = request.form['wdfs']
+        laces = request.form['laces']
+        ldfs = request.form['ldfs']
+        
+        if season == '2019':
+            conn = get_db_connection()
+            cur = conn.cursor()
+            query = "update atp_matches_2019 set score = '" +score+ "', w_ace = " +waces+ ", w_df= " +wdfs+ ", l_ace = " +laces+ ", l_df = " +ldfs+ " where match_id = " +id+ ";"
+            cur.execute(query)
+            conn.commit()
+            return render_template('/success.html')
+        elif season == '2020':
+            conn = get_db_connection()
+            cur = conn.cursor()
+            query = "update atp_matches_2020 set score = '" +score+ "', w_ace = " +waces+ ", w_df= " +wdfs+ ", l_ace = " +laces+ ", l_df = " +ldfs+ " where match_id = " +id+ ";"
+            cur.execute(query)
+            conn.commit()
+            return render_template('/success.html')
+        else :
+            conn = get_db_connection()
+            cur = conn.cursor()
+            query = "update atp_matches_2021 set score = '" +score+ "', w_ace = " +waces+ ", w_df= " +wdfs+ ", l_ace = " +laces+ ", l_df = " +ldfs+ " where match_id = " +id+ ";"
+            cur.execute(query)
+            conn.commit()
+            return render_template('/success.html')
+        
+
+@app.route('/delete_matches/<id>/<season>', methods = ['POST','GET'])
+def delete_match(id,season):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    if season == '2019':
+        query = "DELETE from atp_matches_2019 where match_id = " +id+ ";"
+        cur.execute(query)
+        conn.commit()
+        return render_template('/success.html')
+    elif season == '2020':
+        query = "DELETE from atp_matches_2020 where match_id = " +id+ ";"
+        cur.execute(query)
+        conn.commit()
+        return render_template('/success.html')
+    else:
+        query = "DELETE from atp_matches_2021 where match_id = " +id+ ";"
+        cur.execute(query)
+        conn.commit()
+        return render_template('/success.html')
+            
+            
+        
 
 if __name__ == "__main__":
     app.run(debug=True)

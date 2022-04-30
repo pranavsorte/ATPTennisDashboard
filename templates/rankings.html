@@ -29,16 +29,29 @@
             <button type="submit" class="btn btn-primary">Get Rankings!</button>
         </form>
     </div>
-    <span class="border border-primary">
-    <div class="container" id ="resultrank" style="margin-top: 50px;">
+    <div class="container">
+        <section class="mx-auto my-5" style="max-width: 23rem;">
+            {% for row in players %}
+          <div class="card testimonial-card mt-2 mb-3">
+            <div class="card-up aqua-gradient"></div>
+            <div class="avatar mx-auto white">
+              <img src="../static/download.png" class="rounded-circle img-fluid"
+                alt="woman avatar">
+            </div>
+            <div class="card-body text-center">
+              <h4 class="card-title font-weight-bold">{{row[2]}}</h4>
+              <hr>
+              <p><i class="fas fa-quote-left"></i> {{ row[0] }} {{row[1]}}</p>
+              <p><i class="fas fa-quote-left"></i> Points -- {{ row[3] }}</p>
+            
+            </div>
+          </div>
+          {% endfor %}
+        </section>
+      </div>
+
         
-       {% for row in players %}
-       <p>First Name -- {{ row[0] }}</p>
-       <p>Last Name -- {{ row[1] }}</p>
-       <p>Ranking -- {{ row[2] }}</p>
-       <p>Points -- {{ row[3] }}</p>
-       <p></p>
-       {% endfor %}
+       
     
     </div>
 </span>

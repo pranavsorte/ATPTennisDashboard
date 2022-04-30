@@ -20,8 +20,32 @@
     <div class="container">
         <form action="/atp2019" method="post">
             <div class="form-group">
-              <label for="name">Player Name :</label>
-              <input type="text" class="form-control" id="name" name="playername">
+              <label for="name">Winner Name :</label>
+              <input type="text" class="form-control" id="winner" name="winner" required>
+            </div>
+            <div class="form-group">
+              <label for="name">Loser Name :</label>
+              <input type="text" class="form-control" id="loser" name="loser">
+            </div>
+            <div class="form-group">
+              <label for="name">Tournament Name :</label>
+              <input type="text" class="form-control" id="tourneyname" name="tourneyname">
+            </div>
+            <div class="form-group">
+              <label for="name">Surface :</label>
+              <input type="text" class="form-control" id="surface" name="surface" style="width: 150px;">
+            </div>
+            <div class="form-group">
+              <label for="name">Winner Aces:</label>
+              <input type="text" class="form-control" id="waces" name="waces" style="width: 70px;">
+              <label for="name">Loser Aces :</label>
+              <input type="text" class="form-control" id="laces" name="laces" style="width: 70px;">
+            </div>
+            <div class="form-group">
+              <label for="name">Winner DFs :</label>
+              <input type="text" class="form-control" id="wdfs" name="wdfs" style="width: 70px;">
+              <label for="name">Loser DFs :</label>
+              <input type="text" class="form-control" id="ldfs" name="ldfs" style="width: 70px;">
             </div>
             <!-- <div class="checkbox">
               <label><input type="checkbox" id="surfacecheckbox"> Filter by Surface</label>
