@@ -71,13 +71,13 @@ def atp2019():
         if tournament != "":
             query = query + " AND tourney_name = '" +tournament+ "' "
         if waces != "":
-            query = query + " AND w_ace >= '" +waces+ "' "
+            query = query + " AND CAST(coalesce(w_ace,'0') AS INTEGER) >= " +waces+ ""
         if laces != "":
-            query = query + " AND l_aces >= '" +laces+ "' "
+            query = query + " AND CAST(coalesce(l_ace,'0') AS INTEGER) >= " +laces+ ""
         if wdfs != "":
-            query = query + " AND wdfs >= '" +wdfs+ "' "
+            query = query + " AND CAST(coalesce(w_df,'0') AS INTEGER) >= " +wdfs+ ""
         if ldfs != "":
-            query = query + " AND ldfs >= '" +ldfs+ "' "
+            query = query + " AND CAST(coalesce(l_df,'0') AS INTEGER) >= " +ldfs+ ""
         
         print(query)
         
@@ -114,13 +114,13 @@ def atp2020():
         if tournament != "":
             query = query + " AND tourney_name = '" +tournament+ "' "
         if waces != "":
-            query = query + " AND w_ace >= '" +waces+ "' "
+            query = query + " AND CAST(coalesce(w_ace,'0') AS INTEGER) >= " +waces+ ""
         if laces != "":
-            query = query + " AND l_aces >= '" +laces+ "' "
+            query = query + " AND CAST(coalesce(l_ace,'0') AS INTEGER) >= " +laces+ ""
         if wdfs != "":
-            query = query + " AND wdfs >= '" +wdfs+ "' "
+            query = query + " AND CAST(coalesce(w_df,'0') AS INTEGER) >= " +wdfs+ ""
         if ldfs != "":
-            query = query + " AND ldfs >= '" +ldfs+ "' "
+            query = query + " AND CAST(coalesce(l_df,'0') AS INTEGER) >= " +ldfs+ ""
         
         print(query)
         
@@ -158,13 +158,13 @@ def atp2021():
         if tournament != "":
             query = query + " AND tourney_name = '" +tournament+ "' "
         if waces != "":
-            query = query + " AND w_ace >= '" +waces+ "' "
+            query = query + " AND CAST(coalesce(w_ace,'0') AS INTEGER) >= " +waces+ ""
         if laces != "":
-            query = query + " AND l_aces >= '" +laces+ "' "
+            query = query + " AND CAST(coalesce(l_ace,'0') AS INTEGER) >= " +laces+ ""
         if wdfs != "":
-            query = query + " AND wdfs >= '" +wdfs+ "' "
+            query = query + " AND CAST(coalesce(w_df,'0') AS INTEGER) >= " +wdfs+ ""
         if ldfs != "":
-            query = query + " AND ldfs >= '" +ldfs+ "' "
+            query = query + " AND CAST(coalesce(l_df,'0') AS INTEGER) >= " +ldfs+ ""
         
         print(query)
         
@@ -185,7 +185,7 @@ def playeradmin2():
         last_name = request.form['d_lname']
         conn = get_db_connection()
         cur = conn.cursor()
-        query = "delete from dummy_atp_players where name_first = '" +first_name+ "' and name_last = '" +last_name+ "';"
+        query = "delete from atp_players where name_first = '" +first_name+ "' and name_last = '" +last_name+ "';"
         cur.execute(query)
         conn.commit()
         return render_template('/success.html')
@@ -201,22 +201,27 @@ def playeradmin():
         last_name = request.form['lname']
         hand = request.form['gridRadios']
         ioc = request.form['ioc']
-        wiki_id = request.form['wikid']
+        # wiki_id = request.form['wikid']
         height = request.form['height']     
         
-        print(first_name,last_name,hand,ioc,wiki_id,height)
+        print(first_name,last_name,hand,ioc,height)
         conn = get_db_connection()
         cur = conn.cursor()
-        if height == '' and wiki_id == '':
-            query = "insert into dummy_atp_players values (nextval('players_sequence'),'" +first_name+ "','" +last_name+ "','" +hand+ "','" +ioc+ "');"
+        if height == '':
+            query = "insert into atp_players values (nextval('players_sequence'),'" +first_name+ "','" +last_name+ "','" +hand+ "','" +ioc+ "');"
             cur.execute(query)
             conn.commit()
+        else :
+            query = "insert into atp_players values (nextval('players_sequence'),'" +first_name+ "','" +last_name+ "','" +hand+ "','" +ioc+ "'," +height+ ");"
+            cur.execute(query)
+            conn.commit()
+            
         # cur.execute(query)
         # print(query)
         return render_template('/success.html')
     conn = get_db_connection()
     cur = conn.cursor()
-    query = "select * from dummy_atp_players"
+    query = "select * from atp_players"
     cur.execute(query)
     players = cur.fetchall()
     cur.close()
@@ -228,7 +233,7 @@ def playeradmin():
 def get_player_id(id):
     conn = get_db_connection()
     cur = conn.cursor()
-    query = "SELECT * FROM dummy_atp_players where player_id = " +id+ ";"
+    query = "SELECT * FROM atp_players where player_id = " +id+ ";"
     cur.execute(query)
     data = cur.fetchall()
     cur.close()
@@ -252,12 +257,12 @@ def update_student(id):
         cur = conn.cursor()
         # cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         if height == "" and wiki_id == "" :
-            query = "UPDATE DUMMY_ATP_PLAYERS SET name_first = '" +first_name+ "', name_last = '" +last_name+ "', hand = '" +hand+ "', ioc = '" +ioc+ "' where player_id = " +id+ ";"
+            query = "UPDATE ATP_PLAYERS SET name_first = '" +first_name+ "', name_last = '" +last_name+ "', hand = '" +hand+ "', ioc = '" +ioc+ "' where player_id = " +id+ ";"
             cur.execute(query)
             conn.commit()
             return render_template('/playeradmin.html')
         else :
-            query = "UPDATE DUMMY_ATP_PLAYERS SET name_first = '" +first_name+ "', name_last = '" +last_name+ "', hand = '" +hand+ "', ioc = '" +ioc+ "', height = " +height+ ", wikidata_id = '" +wiki_id+ "' where player_id = " +id+ ";"
+            query = "UPDATE ATP_PLAYERS SET name_first = '" +first_name+ "', name_last = '" +last_name+ "', hand = '" +hand+ "', ioc = '" +ioc+ "', height = " +height+ ", wikidata_id = '" +wiki_id+ "' where player_id = " +id+ ";"
             cur.execute(query)
         # flash('Student Updated Successfully')
             conn.commit()
@@ -267,7 +272,7 @@ def update_student(id):
 def delete_student(id):
     conn = get_db_connection()
     cur = conn.cursor()
-    query = "DELETE FROM dummy_atp_players where player_id = " +id+ ";"
+    query = "DELETE FROM atp_players where player_id = " +id+ ";"
     print(query)
     cur.execute(query)
     conn.commit()
